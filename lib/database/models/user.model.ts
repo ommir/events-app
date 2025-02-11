@@ -10,6 +10,7 @@ const UserSchema = new Schema({
     type: String,
     required: false,
     unique: true,
+    sparse: true,
   },
   username: {
     type: String,
