@@ -61,7 +61,7 @@ export async function POST(req: Request) {
     console.log(evt.data, 'DATAAAAAAAAAAAAAAAAAAAAA');
     const user = {
       clerkId: id,
-      email: email_addresses[0].email_address,
+      email: email_addresses[0]?.email_address || null!,
       username: username!,
       firstName: first_name!,
       lastName: last_name!,
