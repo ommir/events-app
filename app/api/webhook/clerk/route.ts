@@ -1,20 +1,21 @@
 import { Webhook } from 'svix';
 import { headers } from 'next/headers';
 import { clerkClient, WebhookEvent } from '@clerk/nextjs/server';
-import { createUser, deleteUser, updateUser } from '@/lib/actions/user.actions';
 import { NextResponse } from 'next/server';
+import { createUser, deleteUser, updateUser } from '@/lib/actions/user.actions';
 
 export async function POST(req: Request) {
-  const SIGNING_SECRET = process.env.SIGNING_SECRET;
+  const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
+  const clerk = await clerkClient();
 
-  if (!SIGNING_SECRET) {
+  if (!WEBHOOK_SECRET) {
     throw new Error(
-      'Error: Please add SIGNING_SECRET from Clerk Dashboard to .env or .env.local'
+      'Error: Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local'
     );
   }
 
   // Create new Svix instance with secret
-  const wh = new Webhook(SIGNING_SECRET);
+  const wh = new Webhook(WEBHOOK_SECRET);
 
   // Get headers
   const headerPayload = await headers();
@@ -69,10 +70,8 @@ export async function POST(req: Request) {
 
     const newUser = await createUser(user);
 
-    const client = await clerkClient();
-
     if (newUser) {
-      await client.users.updateUserMetadata(id, {
+      await clerk.users.updateUserMetadata(id, {
         publicMetadata: {
           userId: newUser._id,
         },
@@ -105,5 +104,5 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: 'OK', user: deletedUser });
   }
 
-  return new Response('', { status: 200 });
+  return new Response('Webhook received', { status: 200 });
 }
