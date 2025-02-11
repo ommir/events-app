@@ -56,11 +56,8 @@ export async function POST(req: Request) {
   const eventType = evt.type;
 
   if (eventType === 'user.created') {
-    // console.log(evt.data, 'DATAAAAAAAAAAAAAAAAAAAA');
     const { id, email_addresses, image_url, first_name, last_name, username } =
       evt.data;
-
-    console.log(first_name, last_name);
 
     const user = {
       clerkId: id,
@@ -70,8 +67,6 @@ export async function POST(req: Request) {
       lastName: last_name || '',
       photo: image_url,
     };
-
-    console.log(user, 'INI USER ');
 
     const newUser = await createUser(user);
 
@@ -86,28 +81,28 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: 'OK', user: newUser });
   }
 
-  // if (eventType === 'user.updated') {
-  //   const { id, image_url, first_name, last_name, username } = evt.data;
+  if (eventType === 'user.updated') {
+    const { id, image_url, first_name, last_name, username } = evt.data;
 
-  //   const user = {
-  //     firstName: first_name!,
-  //     lastName: last_name!,
-  //     username: username!,
-  //     photo: image_url,
-  //   };
+    const user = {
+      firstName: first_name || '',
+      lastName: last_name || '',
+      username: username!,
+      photo: image_url,
+    };
 
-  //   const updatedUser = await updateUser(id, user);
+    const updatedUser = await updateUser(id, user);
 
-  //   return NextResponse.json({ message: 'OK', user: updatedUser });
-  // }
+    return NextResponse.json({ message: 'OK', user: updatedUser });
+  }
 
-  // if (eventType === 'user.deleted') {
-  //   const { id } = evt.data;
+  if (eventType === 'user.deleted') {
+    const { id } = evt.data;
 
-  //   const deletedUser = await deleteUser(id!);
+    const deletedUser = await deleteUser(id!);
 
-  //   return NextResponse.json({ message: 'OK', user: deletedUser });
-  // }
+    return NextResponse.json({ message: 'OK', user: deletedUser });
+  }
 
   return new Response('Webhook received', { status: 200 });
 }
