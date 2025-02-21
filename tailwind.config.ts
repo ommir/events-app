@@ -2,6 +2,12 @@
 import { withUt } from 'uploadthing/tw';
 
 module.exports = withUt({
+  purge: [
+    './pages/**/*.{ts,tsx}',
+    './components/**/*.{ts,tsx}',
+    './app/**/*.{ts,tsx}',
+    './src/**/*.{ts,tsx}',
+  ],
   darkMode: ['class'],
   content: [
     './pages/**/*.{ts,tsx}',
