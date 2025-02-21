@@ -48,9 +48,9 @@ export default async function Home({ searchParams }: SearchParamProps) {
           emptyTitle="No events found"
           emptyStateSubtext="Come back later"
           collectionType="All_Events"
-          limit={6}
-          page={1}
-          totalPages={2}
+          limit={1}
+          page={page}
+          totalPages={events?.totalPages}
         />
       </section>
     </>
